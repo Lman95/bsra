@@ -1,4 +1,4 @@
-#signin-button, #signup-redirect {
+input[type="submit"].button-primary {
     width: 144px;
     height: 70px;
     font-size: 15px;

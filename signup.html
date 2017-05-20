@@ -1,39 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Signin</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- FontAwesome
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="http://designers.hubspot.com/hs-fs/hub/327485/file-2054199286-css/font-awesome.css" rel="stylesheet">
+
+  <!-- JQuery
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 
+  <!-- Firebase
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>    
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 </head>
 <body>
 
-    <div id="signup_div">
-        <form id="signup_form">
-            Email: <input type="text" id="email"></input>
-            Password: <input type="password" id="password"></input>
-            <input type="submit" id="submit" value="Signup">
-        </form>
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <header>
+    <h1 id="header-text">Blue Sky Rides</h1>
+  </header>
+  <div class="container" id="main">
+    <h4>Sign Up</h4>
+    <form>
+    <div class="row">
+        <div class="twelve columns">
+        <label for="fnameInput">First name</label>
+        <input class="u-full-width" type="text" placeholder="Billy" id="fnameInput">
+      </div>
+      <div class="twelve columns">
+        <label for="lnameInput">Last name</label>
+        <input class="u-full-width" type="text" placeholder="Smith" id="lnameInput">
+      </div> 
+      <div class="twelve columns">
+        <label for="schoolInput">University/College attending</label>
+        <select class="u-full-width" id="schoolInput">
+            <option>Choose a school...</option>
+            <option value="1">UW - Seattle</option>
+            <option value="2">UW - Bothell</option>
+            <option value="3">SPU</option>
+            <option value="4">Bellevue College</option>
+            <option value="5">Seattle U</option>
+            <option value="0">Other...</option>
+      </select>
+      </div>
+      <div class="twelve columns" hidden>
+        <label for="otherSchool">If other, please provide school name</label>
+        <input class="u-full-width" type="text" placeholder="School..." id="otherSchool">
+      </div> 
+      <div class="twelve columns">
+        <label for="emailInput">Your email</label>
+        <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="emailInput">
+      </div>
+      <div class="twelve columns">
+        <label for="passInput">Password</label>
+        <input class="u-full-width" type="password" placeholder="********" id="passInput">
+      </div> 
     </div>
+    <div class="six columns">
+      <input id="signup-button" class="button-primary" type="submit" value="Sign Up">
+    </div>
+    <div class="six columns">
+      <span class="small-text">Already have an account?</span><br><a href="./signin.html">Sign In!</a>
+    </div>
+    </form>
+  </div>
     
 
     <script>
         // Grab the elements
         signupForm = $('#signup_form');
-
-        var config = {
-            apiKey: "AIzaSyATficQkkUvk4tmohfcEOGxvMBF9l5ggfM",
-            authDomain: "rides-app-f2b82.firebaseapp.com",
-            databaseURL: "https://rides-app-f2b82.firebaseio.com",
-            projectId: "rides-app-f2b82",
-            storageBucket: "rides-app-f2b82.appspot.com",
-            messagingSenderId: "1099379594226"
-        };
-
-        // Initialize Firebase, providing you read/write access to the database
-        firebase.initializeApp(config);
 
         signupForm.submit(function(e) {
             e.preventDefault();
@@ -47,5 +106,6 @@
             });
         });
     </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
