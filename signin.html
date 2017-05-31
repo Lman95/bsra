@@ -45,7 +45,7 @@
   </header>
   <div class="container" id="main">
     <h4>Sign In</h4>
-    <form>
+    <form id="signin-form">
     <div class="row">
       <div class="twelve columns">
         <label for="emailInput">Your email</label>
@@ -64,6 +64,42 @@
     </div>
     </form>
   </div>
+  <script>
+    $(document).ready(function () {
+
+      var config = {
+            apiKey: "AIzaSyATficQkkUvk4tmohfcEOGxvMBF9l5ggfM",
+            authDomain: "rides-app-f2b82.firebaseapp.com",
+            databaseURL: "https://rides-app-f2b82.firebaseio.com",
+            projectId: "rides-app-f2b82",
+            storageBucket: "rides-app-f2b82.appspot.com",
+            messagingSenderId: "1099379594226"
+        };
+
+        // Initialize Firebase, providing you read/write access to the database
+        firebase.initializeApp(config);
+
+      // Grab elements
+      var signInForm = document.querySelector("#signin-form");
+
+      // Signs users in when they click the signin button
+      signInForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        // Sign in with an email and password
+        var email = $("#emailInput").val();
+        var password = $("#passInput").val();
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function() {
+          window.location.replace("./index.html");
+        })
+        .catch(function(error) {
+            alert(error);
+        });
+
+      });
+    });
+  </script>
 
 
 <!-- End Document

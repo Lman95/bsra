@@ -45,21 +45,22 @@
     <h1 id="header-text">Blue Sky Rides<i class="fa fa-sign-out" id="signout-button" aria-hidden="true"></i></h1>
   </header>
 
-  <div class="container" id="main">
+  <div class="container">
+  <h4>Pending Requests</h4>
     <div class="row">
-      <div class="twelve columns" id="car-display">
-        <h1 id="car-title">No rides yet!</h1>
-      </div>
-      <div class="eight columns">
-        <button id="request-button" class="button-primary">Request a Ride</button>
-      </div>
+        <div class="twelve columns">
+            <div id="pending-requests">
+                
+            </div>
+        </div>
     </div>
+
     <footer id="footer">
       <ul>
-        <li><a href="#" class="active">My Car<i class="fa fa-car" aria-hidden="true"></i></a></li>
+        <li><a href="./index.html">My Car<i class="fa fa-car" aria-hidden="true"></i></a></li>
         <li><a href="./request.html">New Request<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 </a></li>
-        <li><a href="./pending.html">Pending Requests<i class="fa fa-clock-o" aria-hidden="true"></i>
+        <li><a href="#" class="active">Pending Requests<i class="fa fa-clock-o" aria-hidden="true"></i>
 </a></li>
       </ul>
     </footer>
@@ -82,29 +83,70 @@
 
         // Grab elements
         var signoutButton = document.querySelector("#signout-button");
-        var requestButton = document.querySelector("#request-button");
 
+        // check current user
+        var email = "";
+        var userID = "";
+        var checked;
+
+        firebase.auth().onAuthStateChanged(function(user) {
+          if(checked !== true){
+            if (!user) {
+                // No user is signed in.
+                window.location.replace("./signin.html");
+            } else {
+                email = user.email;
+                userID = user.uid;
+                console.log(userID);
+            }
+            checked = true;        
+          }
+        });
+
+        var userRequests = firebase.database().ref('request/' + userID);
+        userRequests.on('value', function(snapshot) {
+          var data = snapshot.val();
+          console.log(data);
+          snapshot.forEach(function(childSnapshot) {
+            var childKey = childSnapshot.key;
+            if (childKey === userID) {
+              data = childSnapshot.val();
+              return true;
+            }
+          });
+
+            // var childData = childSnapshot.val();
+
+            var pendingList = document.querySelector("#pending-requests");
+
+            var card = document.createElement("div");
+            var event = document.createElement("h2");
+            var pickup = document.createElement("h5");
+            var dropoff = document.createElement("h5");
+
+            event.innerText = data.event;
+            console.log("innerText: " + event.innerText);
+            console.log("snapshot: " + data.event);
+            pickup.innerText = "Pickup: " + data.pickup;
+            dropoff.innerText = "Dropoff: " + data.dropoff;
+
+            card.className = "pending-request-card";
+
+            card.appendChild(event);
+            card.appendChild(pickup);
+            card.appendChild(dropoff);
+
+            pendingList.appendChild(card);
+
+        });
+
+        // sign out button functionality
         signoutButton.addEventListener("click", function() {
           // Sign out, then redirect
           firebase.auth().signOut()
           .then(function() {
               window.location.replace("./signin.html");
           });
-        });
-
-        requestButton.addEventListener("click", function() {
-          window.location.replace("./request.html");
-        })
-
-        var checked;
-        firebase.auth().onAuthStateChanged(function(user) {
-          if(checked !== true){
-            if (!user) {
-              // No user is signed in.
-              window.location.replace("./signin.html");
-            } 
-            checked = true;        
-          }
         });
     });  
   </script>

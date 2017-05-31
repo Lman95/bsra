@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Signin</title>
+  <title>SignUp</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -45,7 +45,7 @@
   </header>
   <div class="container" id="main">
     <h4>Sign Up</h4>
-    <form>
+    <form id="signup-form">
     <div class="row">
         <div class="twelve columns">
         <label for="fnameInput">First name</label>
@@ -70,7 +70,11 @@
       <div class="twelve columns" hidden>
         <label for="otherSchool">If other, please provide school name</label>
         <input class="u-full-width" type="text" placeholder="School..." id="otherSchool">
-      </div> 
+      </div>
+      <div class="twelve columns">
+        <label for="phone">Phone Number</label>
+        <input class="u-full-width" type="number" placeholder="123-456-7890" id="phone">
+      </div>
       <div class="twelve columns">
         <label for="emailInput">Your email</label>
         <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="emailInput">
@@ -89,23 +93,60 @@
     </form>
   </div>
     
-
     <script>
-        // Grab the elements
-        signupForm = $('#signup_form');
+      $(document).ready(function() {
+        var config = {
+            apiKey: "AIzaSyATficQkkUvk4tmohfcEOGxvMBF9l5ggfM",
+            authDomain: "rides-app-f2b82.firebaseapp.com",
+            databaseURL: "https://rides-app-f2b82.firebaseio.com",
+            projectId: "rides-app-f2b82",
+            storageBucket: "rides-app-f2b82.appspot.com",
+            messagingSenderId: "1099379594226"
+        };
 
-        signupForm.submit(function(e) {
+        // Initialize Firebase, providing you read/write access to the database
+        firebase.initializeApp(config);
+
+        // Grab the elements
+        var signupForm = document.querySelector("#signup-form");
+
+        var passenger = firebase.database().ref('passenger');
+
+        signupForm.addEventListener("submit", function(e) {
             e.preventDefault();
             // Get email and password from a form
-            var email = $('#email').val();
-            var password = $("#password").val();
+            var phone = $("#phone").val();
+            var email = $("#emailInput").val();
+            var password = $("#passInput").val();
+            var firstName = $("#fnameInput").val();
+            var lastName = $("#lnameInput").val();
+            var school = "";
+            if ($("#schoolInput").val() != 0) {
+              school = $("#schoolInput").val();
+            } else {
+              school = $("#otherSchool").val();
+            }
 
             // Create a user using the values from your form
-            firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
-                // Do something after the user has been created
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(function(user){
+              passenger.push({
+                firstName: firstName,
+                lastName: lastName,
+                school: school,
+                phone: phone,
+                email: email,
+                driver: 0
+              });
+              window.location.replace("./index.html");
+            })
+            .catch(function(error) {
+              alert(error);
             });
         });
+      });
     </script>
-    <script src="js/main.js"></script>
+    
+
 </body>
 </html>

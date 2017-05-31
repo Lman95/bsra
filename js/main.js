@@ -1,3 +1,5 @@
+$(document).ready(function () {
+
 var config = {
             apiKey: "AIzaSyATficQkkUvk4tmohfcEOGxvMBF9l5ggfM",
             authDomain: "rides-app-f2b82.firebaseapp.com",
@@ -9,3 +11,5 @@ var config = {
 
         // Initialize Firebase, providing you read/write access to the database
         firebase.initializeApp(config);
+
+});

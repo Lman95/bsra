@@ -1,5 +1,4 @@
 input[type="submit"].button-primary {
-    width: 144px;
     height: 70px;
     font-size: 15px;
     margin: auto;
@@ -7,17 +6,26 @@ input[type="submit"].button-primary {
     border-color: #4687A9;
 }
 
-.small-text {
-    font-size: 8pt;
+#request-button {
+    font-size: 15px;
+    background: #4687A9;
+    border-color: #4687A9;
+    height: 70px;
+    margin-left: 22%;
 }
 
-#main {
-    margin-top: 20px;
+#car-title {
+    margin-top: 25%; margin-left: 20%;
+}
+
+.small-text {
+    font-size: 8pt;
 }
 
 header {
     background: #4687A9;
     height: 70px;
+    margin-bottom: 1em;
 }
 
 #header-text {
@@ -111,4 +119,81 @@ header {
 .navigation .menu-icon:hover {
   color: #112027;
   background-color: transparent;
+}
+
+.pending-request-card {
+  background:#4687A9;
+  color: white;
+  margin: 1.5em;
+  padding: 1.5em;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* =Footer
+-------- */
+#footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height: 52px;
+    width:100%;
+    background:#4687A9;
+    list-style-type: none;
+}
+
+li {
+    display: inline-block;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+a:hover {
+  color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #112027;
+}
+
+.active {
+    
+    background-color: #B19979;
+}
+
+.fa {
+  margin-left: 0.5em;
+}
+
+.fa-sign-out {
+  float: right;
+  font-size: 27pt;
+  margin: 0.5em;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+    a {
+      font-size: 9pt;
+    }
+
+    .fa {
+      font-size: 12pt;
+    }
+
+    .fa-sign-out {
+      float: right;
+      font-size: 24pt;
+      margin: 0.5em;
+    }
+
+    #footer {
+      height: 45px;;
+    }
 }

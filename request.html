@@ -45,19 +45,50 @@
     <h1 id="header-text">Blue Sky Rides<i class="fa fa-sign-out" id="signout-button" aria-hidden="true"></i></h1>
   </header>
 
-  <div class="container" id="main">
+  <div class="container">
+  <h4>Request a Ride</h4>
+    <form id="request-form">
     <div class="row">
-      <div class="twelve columns" id="car-display">
-        <h1 id="car-title">No rides yet!</h1>
-      </div>
-      <div class="eight columns">
-        <button id="request-button" class="button-primary">Request a Ride</button>
-      </div>
+        <div class="twelve columns">
+            <label for="event">Event</label>
+            <select class="u-full-width" id="event">
+                <option>I need a ride to...</option>
+                <option value="1st Service">Sunday 9:15</option>
+                <option value="2nd Service">Sunday 11:15</option>
+                <option value="Spring Party">Spring Party</option>
+            </select>
+        </div>
+        <div class="twelve columns">
+            <!--Locations should be shown based on school property-->
+            <label for="pickLocation">Pickup Location</label>
+            <select class="u-full-width" id="pickLocation">
+                <option>Choose a location...</option>
+                <option value="Elm Hall">Elm Hall</option>
+                <option value="McMahon Hall">McMahon Hall</option>
+                <option value="42nd & 8th">42nd & 8th</option>
+            </select>
+        </div>
+        <div class="twelve columns">
+            <!--Locations should be shown based on school property-->
+            <!--Should be able to select "same as pickup"-->
+            <label for="dropLocation">Dropoff Location</label>
+            <select class="u-full-width" id="dropLocation">
+                <option>Choose a location...</option>
+                <option value="Elm Hall">Elm Hall</option>
+                <option value="McMahon Hall">McMahon Hall</option>
+                <option value="42nd & 8th">42nd & 8th</option>
+            </select>
+        </div>
+        <div class="six columns">
+            <input id="request-send" class="button-primary" type="submit" value="Send Request">
+        </div>
     </div>
+    </form> 
+
     <footer id="footer">
       <ul>
-        <li><a href="#" class="active">My Car<i class="fa fa-car" aria-hidden="true"></i></a></li>
-        <li><a href="./request.html">New Request<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        <li><a href="./index.html">My Car<i class="fa fa-car" aria-hidden="true"></i></a></li>
+        <li><a href="#" class="active">New Request<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 </a></li>
         <li><a href="./pending.html">Pending Requests<i class="fa fa-clock-o" aria-hidden="true"></i>
 </a></li>
@@ -81,30 +112,50 @@
         firebase.initializeApp(config);
 
         // Grab elements
+        var requestForm = document.querySelector("#request-form");
         var signoutButton = document.querySelector("#signout-button");
-        var requestButton = document.querySelector("#request-button");
 
+        // check current user
+        var userID = "";
+        var email = "";
+        var request = "";
+        var checked;
+        firebase.auth().onAuthStateChanged(function(user) {
+          if(checked !== true){
+            if (!user) {
+                // No user is signed in.
+                window.location.replace("./signin.html");
+            } else {
+                email = user.email;
+                userID = user.uid;
+                request = firebase.database().ref('request/' + userID);
+            }
+            checked = true;        
+          }
+        });
+
+
+        requestForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            var event = $("#event").val();
+            var pickup = $("#pickLocation").val();
+            var dropoff = $("#dropLocation").val();
+            request.push({
+                event: event,
+                pickup: pickup,
+                dropoff: dropoff
+            });
+            requestForm.reset();
+            window.location.replace("/pending.html");
+        });
+
+        // sign out button functionality
         signoutButton.addEventListener("click", function() {
           // Sign out, then redirect
           firebase.auth().signOut()
           .then(function() {
               window.location.replace("./signin.html");
           });
-        });
-
-        requestButton.addEventListener("click", function() {
-          window.location.replace("./request.html");
-        })
-
-        var checked;
-        firebase.auth().onAuthStateChanged(function(user) {
-          if(checked !== true){
-            if (!user) {
-              // No user is signed in.
-              window.location.replace("./signin.html");
-            } 
-            checked = true;        
-          }
         });
     });  
   </script>
