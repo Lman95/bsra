@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Driver</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- FontAwesome
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="http://designers.hubspot.com/hs-fs/hub/327485/file-2054199286-css/font-awesome.css" rel="stylesheet">
+
+  <!-- JQuery
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 
+  <!-- Firebase
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>    
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <header>
+    <h1 id="header-text">Blue Sky Rides<i class="fa fa-sign-out" id="signout-button" aria-hidden="true"></i></h1>
+  </header>
+  <div class="container" id="main">
+    <h4>Sign Up to Drive</h4>
+    <form id="driver-form">
+    <div class="row">
+        <div class="twelve columns">
+        <label for="event">Event</label>
+        <select class="u-full-width" id="event">
+            <option>Choose an event...</option>
+            <option value="1st Service">First Service</option>
+            <option value="2nd Service">Second Service</option>
+            <option value="Spring Party">Spring Party</option>
+        </select>      
+      </div>
+      <div class="twelve columns">
+        <label for="pickup">Preferred Pickup</label>
+        <select class="u-full-width" id="pickup">
+            <option>Choose a location...</option>
+            <option value="Elm Hall">Elm Hall</option>
+            <option value="McMahon Hall">McMahon Hall</option>
+            <option value="Allegro">Allegro </option>
+        </select>      
+      </div>
+      <div class="twelve columns">
+        <label for="driveBack">Driving back?</label>
+        <select class="u-full-width" id="driveBack">
+            <option>Y/N</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>      
+      </div>
+      <div class="twelve columns">
+        <label for="numSeats">Number of seats</label>
+        <input class="u-full-width" type="number" placeholder="4" id="numSeats">
+      </div>
+      <div class="six columns">
+      <input id="signup-button" class="button-primary" type="submit" value="Sign Up">
+    </div>
+    <div class="six columns">
+      <a href="./index.html" class="small-text">Go back</a>
+    </div>
+    </form>
+  </div>
+    
+    <script>
+      $(document).ready(function() {
+        var config = {
+            apiKey: "AIzaSyATficQkkUvk4tmohfcEOGxvMBF9l5ggfM",
+            authDomain: "rides-app-f2b82.firebaseapp.com",
+            databaseURL: "https://rides-app-f2b82.firebaseio.com",
+            projectId: "rides-app-f2b82",
+            storageBucket: "rides-app-f2b82.appspot.com",
+            messagingSenderId: "1099379594226"
+        };
+
+        // Initialize Firebase, providing you read/write access to the database
+        firebase.initializeApp(config);
+
+        // Grab the elements
+        var driverForm = document.querySelector("#driver-form");
+        var schoolInput = document.querySelector("#schoolInput");
+        var signoutButton = document.querySelector("#signout-button");
+
+        var firstName = "";
+        var lastName = "";
+        var phone = "";
+
+        var checked = "";
+        firebase.auth().onAuthStateChanged(function(user) {
+          if(checked !== true){
+            if (!user) {
+                // No user is signed in.
+                window.location.replace("./signin.html");
+            } else {
+                email = user.email;
+                userID = user.uid;
+                console.log(userID);
+
+                var passenger = firebase.database().ref('passenger');
+                passenger.on('value', function(snapshot) {
+                  var data = snapshot.val();
+                  console.log(data);
+                snapshot.forEach(function(childSnapshot) {
+                    if (childSnapshot.val().email === email) {
+                        firstName = childSnapshot.val().firstName;
+                        lastName = childSnapshot.val().lastName;
+                        phone = childSnapshot.val().phone;
+                        console.log(firstName);
+                        console.log(lastName);
+                        return true;
+                    }
+                });
+            });
+          }
+            checked = true;        
+        }
+      });
+
+        var car = firebase.database().ref('cars');
+
+        driverForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            // Get email and password from a form
+            var event = $("#event").val();
+            var pickup = $("#pickup").val();
+            var driveBack = $("#driveBack").val();
+            var numSeats = $("#numSeats").val();
+            
+            car.push({
+                firstName: firstName,
+                lastName: lastName,
+                phone: phone,
+                event: event,
+                pickup: pickup,
+                driveBack: driveBack,
+                numSeats: numSeats
+            })
+
+        });
+
+
+        signoutButton.addEventListener("click", function() {
+          // Sign out, then redirect
+          firebase.auth().signOut()
+          .then(function() {
+              window.location.replace("./signin.html");
+          });
+        });
+      });
+    </script>
+    
+
+</body>
+</html>

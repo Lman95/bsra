@@ -6,7 +6,7 @@ input[type="submit"].button-primary {
     border-color: #4687A9;
 }
 
-#request-button {
+#request-button, #driver-button {
     font-size: 15px;
     background: #4687A9;
     border-color: #4687A9;

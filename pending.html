@@ -84,11 +84,36 @@
         // Grab elements
         var signoutButton = document.querySelector("#signout-button");
 
+        // function to make a pending request card
+        function makePendingCard(event, pickup, dropoff) {
+          var pendingList = document.querySelector("#pending-requests");
+
+          var card = document.createElement("div");
+          var cardEvent = document.createElement("h2");
+          var cardPickup = document.createElement("h5");
+          var cardDropoff = document.createElement("h5");
+
+          cardEvent.innerText = event;
+          console.log("innerText: " + event.innerText);
+          console.log("snapshot: " + event);
+          cardPickup.innerText = "Pickup: " + pickup;
+          cardDropoff.innerText = "Dropoff: " + dropoff;
+
+          card.className = "pending-request-card";
+
+          card.appendChild(cardEvent);
+          card.appendChild(cardPickup);
+          card.appendChild(cardDropoff);
+
+          pendingList.appendChild(card);
+        }
+
         // check current user
         var email = "";
         var userID = "";
         var checked;
 
+        // does the work
         firebase.auth().onAuthStateChanged(function(user) {
           if(checked !== true){
             if (!user) {
@@ -98,57 +123,35 @@
                 email = user.email;
                 userID = user.uid;
                 console.log(userID);
-            }
-            checked = true;        
+
+                var userRequests = firebase.database().ref('request/' + userID);
+                userRequests.on('value', function(snapshot) {
+                  var data = snapshot.val();
+                  console.log(data);
+                  snapshot.forEach(function(childSnapshot) {
+                  var event = childSnapshot.val().event;
+                  var pickup = childSnapshot.val().pickup;
+                  var dropoff = childSnapshot.val().dropoff;
+
+                  makePendingCard(event, pickup, dropoff);
+                });
+            });
           }
+            checked = true;        
+        }
+      });
+
+      // sign out button functionality
+      signoutButton.addEventListener("click", function() {
+        // Sign out, then redirect
+        firebase.auth().signOut()
+        .then(function() {
+            window.location.replace("./signin.html");
         });
+      });  
+    });
 
-        var userRequests = firebase.database().ref('request/' + userID);
-        userRequests.on('value', function(snapshot) {
-          var data = snapshot.val();
-          console.log(data);
-          snapshot.forEach(function(childSnapshot) {
-            var childKey = childSnapshot.key;
-            if (childKey === userID) {
-              data = childSnapshot.val();
-              return true;
-            }
-          });
-
-            // var childData = childSnapshot.val();
-
-            var pendingList = document.querySelector("#pending-requests");
-
-            var card = document.createElement("div");
-            var event = document.createElement("h2");
-            var pickup = document.createElement("h5");
-            var dropoff = document.createElement("h5");
-
-            event.innerText = data.event;
-            console.log("innerText: " + event.innerText);
-            console.log("snapshot: " + data.event);
-            pickup.innerText = "Pickup: " + data.pickup;
-            dropoff.innerText = "Dropoff: " + data.dropoff;
-
-            card.className = "pending-request-card";
-
-            card.appendChild(event);
-            card.appendChild(pickup);
-            card.appendChild(dropoff);
-
-            pendingList.appendChild(card);
-
-        });
-
-        // sign out button functionality
-        signoutButton.addEventListener("click", function() {
-          // Sign out, then redirect
-          firebase.auth().signOut()
-          .then(function() {
-              window.location.replace("./signin.html");
-          });
-        });
-    });  
+        
   </script>
 
 <!-- End Document

@@ -53,7 +53,11 @@
       <div class="eight columns">
         <button id="request-button" class="button-primary">Request a Ride</button>
       </div>
+      <div class="eight columns">
+        <button id="driver-button" class="button-primary">SignUp as a Driver</button>
     </div>
+
+    <!-- footer navigation --> 
     <footer id="footer">
       <ul>
         <li><a href="#" class="active">My Car<i class="fa fa-car" aria-hidden="true"></i></a></li>
@@ -83,6 +87,7 @@
         // Grab elements
         var signoutButton = document.querySelector("#signout-button");
         var requestButton = document.querySelector("#request-button");
+        var driverButton = document.querySelector("#driver-button");
 
         signoutButton.addEventListener("click", function() {
           // Sign out, then redirect
@@ -94,6 +99,10 @@
 
         requestButton.addEventListener("click", function() {
           window.location.replace("./request.html");
+        })
+
+        driverButton.addEventListener("click", function() {
+          window.location.replace("./driver.html");
         })
 
         var checked;
