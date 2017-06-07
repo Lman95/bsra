@@ -92,6 +92,7 @@
           var cardEvent = document.createElement("h2");
           var cardPickup = document.createElement("h5");
           var cardDropoff = document.createElement("h5");
+          var deleteIcon = document.createElement("i");
 
           cardEvent.innerText = event;
           console.log("innerText: " + event.innerText);
@@ -100,7 +101,13 @@
           cardDropoff.innerText = "Dropoff: " + dropoff;
 
           card.className = "pending-request-card";
+          deleteIcon.className = "fa fa-times";
 
+          deleteIcon.addEventListener("click", function() {
+            // function to delete the request
+          })
+
+          card.appendChild(deleteIcon);
           card.appendChild(cardEvent);
           card.appendChild(cardPickup);
           card.appendChild(cardDropoff);
@@ -133,7 +140,7 @@
                   var pickup = childSnapshot.val().pickup;
                   var dropoff = childSnapshot.val().dropoff;
 
-                  makePendingCard(event, pickup, dropoff);
+                  makePendingCard(event, pickup, dropoff, userID);
                 });
             });
           }
@@ -150,7 +157,6 @@
         });
       });  
     });
-
         
   </script>
 

@@ -48,7 +48,13 @@
   <div class="container" id="main">
     <div class="row">
       <div class="twelve columns" id="car-display">
-        <h1 id="car-title">No rides yet!</h1>
+        <h1 id="car-title">Current Car</h1>
+        <h2>First Service</h2>
+        <h3>Driver: Landon Young</h3>
+        <h4>Pickup: 8:20am at Elm Hall</h4>
+        <h4>Passenger 1: Billy Smith</h4>
+        <h4>Passenger 2: John Doe</h4>
+        <h4>Passenger 3: Empty</h4>
       </div>
       <div class="eight columns">
         <button id="request-button" class="button-primary">Request a Ride</button>
@@ -97,6 +103,37 @@
           });
         });
 
+        // function to show the current car
+        // function showCar(event, driver, p1, p2, p3, pickup, dropoff) {
+        //   var carDisplay = document.querySelector("#car-display");
+        //   var carTitle = document.querySelector("#car-title");
+
+        //   var event = document.createElement("h1");
+        //   var driver = document.createElement("h2");
+        //   var p1 = document.createElement("h4");
+        //   var p2 = document.createElement("h4");
+        //   var p3 = document.createElement("h4");
+        //   var pickup = document.createElement("h5");
+        //   var dropoff = document.createElement("h5");
+
+        //   event.innerText = event;
+        //   driver.innerText = driver;
+        //   p1.innerText = "Passenger 1: " + p1;
+        //   p2.innerText = "Passenger 2: " + p2;
+        //   p3.innerText = "Passenger 3: " + p3;
+        //   pickup.innerText = "Pickup: " + pickup;
+        //   dropoff.innerText = "Dropoff: " + dropoff;
+        //   carTitle.innerText = "Current Car";
+
+        //   carDisplay.appendChild(event);
+        //   carDisplay.appendChild(driver);
+        //   carDisplay.appendChild(p1);
+        //   carDisplay.appendChild(p2);
+        //   carDisplay.appendChild(p3);
+        //   carDisplay.appendChild(pickup);
+        //   carDisplay.appendChild(dropoff);
+        // }
+
         requestButton.addEventListener("click", function() {
           window.location.replace("./request.html");
         })
@@ -111,7 +148,24 @@
             if (!user) {
               // No user is signed in.
               window.location.replace("./signin.html");
-            } 
+            } else {
+              var carsRef = firebase.database().ref('cars');
+              carsRef.on('value', function(snapshot) {
+                var data = snapshot.val();
+                console.log(data);
+                snapshot.forEach(function(childSnapshot) {
+                var event = childSnapshot.val().event;
+                var pickup = childSnapshot.val().pickup;
+                var dropoff = childSnapshot.val().dropoff;
+                var driver = childSnapshot.val().firstName + " " + childSnapshot.val().lastName;
+                var p1 = childSnapshot.val().p1;
+                var p2 = "empty";
+                var p3 = "empty";
+
+                showCar(event, driver, p1, p2, p3, pickup, dropoff);
+              });
+              });
+            }
             checked = true;        
           }
         });

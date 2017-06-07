@@ -15,7 +15,7 @@ input[type="submit"].button-primary {
 }
 
 #car-title {
-    margin-top: 25%; margin-left: 20%;
+    margin-top: 5%; margin-left: 20%;
 }
 
 .small-text {
@@ -176,6 +176,10 @@ li a:hover:not(.active) {
   font-size: 27pt;
   margin: 0.5em;
   cursor: pointer;
+}
+
+.fa-times {
+  float: right;
 }
 
 @media screen and (max-width: 480px) {

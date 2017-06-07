@@ -134,7 +134,6 @@
           }
         });
 
-
         requestForm.addEventListener("submit", function(e) {
             e.preventDefault();
             var event = $("#event").val();
@@ -145,6 +144,9 @@
                 pickup: pickup,
                 dropoff: dropoff
             });
+            firebase.database().ref("cars").push({
+                p1: "Billy"
+            })
             requestForm.reset();
             window.location.replace("/pending.html");
         });
